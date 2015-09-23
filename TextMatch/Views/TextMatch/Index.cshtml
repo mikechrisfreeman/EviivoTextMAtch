@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <div class="jumbotron" >
+        <h1>Text Match</h1>
+        <p>An MVC application used to simply match the occurances of a given subtext within a string</p>
+    </div>
+    <div class="myForm">
+         <form role="form">
+            <div class="form-group">
+                <label for="subtext">Subtext:</label>
+                <input type="input" class="form-control" id="subtext" name="subtext">
+            </div>
+            <div class="form-group">
+                <label for="text">Text:</label>
+                <textarea rows ="4" cols="50" class="form-control" id="text" name="text" ></textarea>
+            </div>
+            <button type="button" class="btn btn-default" id="button">Evaluate</button>
+        </form>
+    </div>
+    <div class="myTable">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>subText</th>
+                    <th>Text</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="tablebody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#button').on('click', function () {
+
+                var source = {
+                    "text": $('#text').val(),
+                    "subtext": $('#subtext').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "/api/EvaluateText",
+                    data: JSON.stringify(source),
+                    success: function (data) {
+                        appendToTable(data);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            //this function Builds the table based on the result of the evaluation
+            function appendToTable(data) {
+
+
+                var tableBody = $('#tablebody');
+
+                var tableRecord = document.createElement('tr');
+                var tabledata1 = document.createElement('td');
+                tabledata1.appendChild(document.createTextNode(data.Subtext));
+                var tabledata2 = document.createElement('td');
+                tabledata2.appendChild(document.createTextNode(data.SText));
+                var tabledata3 = document.createElement('td');
+                tabledata3.appendChild(document.createTextNode(data.result));
+
+                tableRecord.appendChild(tabledata1);
+                tableRecord.appendChild(tabledata2);
+                tableRecord.appendChild(tabledata3);
+
+                tableBody.append(tableRecord);
+
+            }
+        });
+    </script>
+}
