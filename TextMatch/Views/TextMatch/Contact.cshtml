@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@model TextMatch.Models.ContactModel
+<div>
+    <div class="jumbotron">
+        <h1>@Model.Name</h1>
+        <p>Contact Details</p>
+    </div>
+    <address>
+        @Model.AddressLine1<br />
+        @Model.AddressLine2<br />
+        <abbr title="Phone">P:</abbr>
+        @Model.ContactNo
+    </address>
+</div>
